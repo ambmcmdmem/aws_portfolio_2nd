@@ -17,6 +17,7 @@ class CreateChatRoomUserTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('chat_room_id')->constrained();
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

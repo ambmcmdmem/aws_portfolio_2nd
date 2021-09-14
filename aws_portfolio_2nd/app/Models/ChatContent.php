@@ -34,6 +34,8 @@ class ChatContent extends Model
     }
 
     public function getPostImageAttribute($value) {
-        return asset('storage/' . $value);
+        if($value) {
+            return asset('storage/' . $value);
+        }
     }
 }

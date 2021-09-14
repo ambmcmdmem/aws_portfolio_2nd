@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ChatRoom;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+
 // use App\Models\ChatContent;
 
 class ChatRoomController extends Controller
@@ -28,6 +30,7 @@ class ChatRoomController extends Controller
 
         $chatRoom->chat_contents()->create($input);
 
-        return back();
+        return request('post_image');
+        // return back();
     }
 }

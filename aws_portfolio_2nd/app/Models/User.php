@@ -48,4 +48,12 @@ class User extends Authenticatable
     public function chat_rooms() {
         return $this->belongsToMany(ChatRoom::class);
     }
+
+    public function getAvatarAttribute($avatar) {
+        if($avatar) {
+            return asset('storage/avatar' . $avatar);
+        } else {
+            return asset('storage/public/initial_ava.png');
+        }
+    }
 }
