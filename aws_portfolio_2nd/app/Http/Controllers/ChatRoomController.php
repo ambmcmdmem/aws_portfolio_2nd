@@ -30,7 +30,6 @@ class ChatRoomController extends Controller
 
         $chatRoom->chat_contents()->create($input);
 
-        return request('post_image');
         // return back();
     }
 }

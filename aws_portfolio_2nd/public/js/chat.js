@@ -50,6 +50,7 @@ const add_new_chat_item = () => {
 // xmlHttpRequestを用いて非同期処理
 const submit_http_request_func = () => {
     const xmlHttpRequest = new XMLHttpRequest();
+    // CSRFのトークン
     const token = document.getElementsByName('csrf-token')[0].content;
     const formData = new FormData();
 
@@ -62,20 +63,22 @@ const submit_http_request_func = () => {
         formData.append('post_image', fileData);
     }
 
+    // 通信後の処理
     xmlHttpRequest.onreadystatechange = function(){
+        // 通信成功時
         if(this.readyState == 4 && this.status == 200){
             // チャット追加の処理
             add_new_chat_item();
         }
     }
 
-    // (3)HTTPのGETメソッドとアクセスする場所を指定
+    // HTTPのPOSTメソッドとアクセスする場所を指定
     xmlHttpRequest.open('POST',location.href,true);
 
-    // サーバに対して解析方法を指定する
+    // トークンの指定
     xmlHttpRequest.setRequestHeader('X-CSRF-TOKEN', token);
 
-    // (4)HTTPリクエストを送信
+    // HTTPリクエストを送信
     xmlHttpRequest.send(formData);
 };
 
@@ -90,7 +93,7 @@ submit_btn_element.addEventListener('click', () => {
 
 /*
 |--------------------------------------------------------------------------
-| ここからjQuery(Ajax)の処理
+| ここからjQuery(Ajax)での処理
 |--------------------------------------------------------------------------
 |
 */
