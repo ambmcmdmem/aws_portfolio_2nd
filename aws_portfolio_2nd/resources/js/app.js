@@ -15,5 +15,3 @@ require('./bootstrap');
 require('./components/Example');
 
 // require('./components/ChatReact');
-
-// require('./test');

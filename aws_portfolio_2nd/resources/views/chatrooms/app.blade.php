@@ -40,4 +40,5 @@
 
 @section('script')
     <script src="{{ asset('js/chat.js') }}" defer></script>
+    <script src="{{ asset('js/test.js') }}" defer></script>
 @endsection
