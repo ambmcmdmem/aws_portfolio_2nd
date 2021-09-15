@@ -17,7 +17,6 @@ class ChatRoomController extends Controller
      * @return void
      */
     public function app(ChatRoom $chatRoom) {
-        
         return view('chatrooms.app', compact('chatRoom'));
     }
 
@@ -31,5 +30,9 @@ class ChatRoomController extends Controller
         $chatRoom->chat_contents()->create($input);
 
         // return back();
+    }
+
+    public function getApp(ChatRoom $chatRoom) {
+        return view('components.chat.app', compact('chatRoom'));
     }
 }

@@ -48,7 +48,7 @@ const add_new_chat_item = () => {
 };
 
 // xmlHttpRequestを用いて非同期処理
-const submit_http_request_func = () => {
+const submit_http_request_func = (save_url) => {
     const xmlHttpRequest = new XMLHttpRequest();
     // CSRFのトークン
     const token = document.getElementsByName('csrf-token')[0].content;
@@ -73,7 +73,7 @@ const submit_http_request_func = () => {
     }
 
     // HTTPのPOSTメソッドとアクセスする場所を指定
-    xmlHttpRequest.open('POST',location.href,true);
+    xmlHttpRequest.open('POST',save_url,true);
 
     // トークンの指定
     xmlHttpRequest.setRequestHeader('X-CSRF-TOKEN', token);
@@ -82,11 +82,12 @@ const submit_http_request_func = () => {
     xmlHttpRequest.send(formData);
 };
 
-
+console.log('test');
 // 送信ボタン押下時
 submit_btn_element.addEventListener('click', () => {
     if(chat_txt_element.value || chat_file_element.value) {
-        submit_http_request_func();
+        const save_url = submit_btn_element.dataset.saveurl;
+        submit_http_request_func(save_url);
     }
 }, false);
 
