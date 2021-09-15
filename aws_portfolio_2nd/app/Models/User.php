@@ -56,4 +56,5 @@ class User extends Authenticatable
             return asset('storage/public/initial_ava.png');
         }
     }
+
 }

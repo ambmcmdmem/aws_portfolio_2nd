@@ -1,134 +1,72 @@
-// 送信ボタン
-const submit_btn_element = document.getElementById('new_chat_submit_btn'); 
-// チャットリスト
-const chat_content_list_element = document.getElementById('chat_content_list');
-// 入力した文字の要素
-const chat_txt_element = document.getElementById('new_chat_txt');
-// 選択した画像の要素
-const chat_file_element = document.getElementById('new_chat_file');
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+var __webpack_exports__ = {};
+/*!******************************!*\
+  !*** ./resources/ts/chat.ts ***!
+  \******************************/
+ // チャットのリンク部分の要素たち
+
+var chat_room_link_item_elements = document.getElementsByClassName('chat_room_link_item'); // クリックイベント（チャットの表示）の許可を割り当て
+
+var chat_room_event_allocate = function chat_room_event_allocate(target) {
+  for (var i = 0; i < chat_room_link_item_elements.length; i++) {
+    chat_room_link_item_elements[i].addEventListener('click', chat_room_link_item_func);
+  }
+
+  if (target !== null) {
+    // 現在表示させているものはクリックイベント削除
+    target.removeEventListener('click', chat_room_link_item_func);
+  }
+}; // チャットリンククリック時の関数
 
 
-// dataをHTTPRequest用に解析
-const EncodeHTMLForm = (data) => {
-    var params = [];
-    for(var name in data){
-      var value = data[name];
-      var param = encodeURIComponent(name).replace(/%20/g, '+')
-        + '=' + encodeURIComponent(value).replace(/%20/g, '+');
-      params.push(param);
-    }
-    return params.join('&');
+var chat_room_link_item_func = function chat_room_link_item_func(e) {
+  // セーブ先のURLを指定
+  var target = e.currentTarget;
+  var event_url = target.dataset.posturl;
+  event_request_func(event_url); // 2回目以降はNG（仮）
+
+  chat_room_event_allocate(target);
 };
 
-// 新しくチャットを追加
-const add_new_chat_item = () => {
-    // 新しく追加されるチャット内容
-    const new_chat_content_item_element = document.createElement('li');
+chat_room_event_allocate(null); // xmlHttpRequestを用いて非同期処理
 
-    // 文字の場合
-    if(chat_txt_element.value) {
-        new_chat_content_item_element.textContent = chat_txt_element.value;
-    // 画像の場合
-    } else if(chat_file_element.value) {
-        const fr = new FileReader();
-        const new_chat_file_element = document.createElement('img');
-        new_chat_file_element.setAttribute('width', '200');
-        
-        fr.onload = () => {
-            new_chat_file_element.setAttribute('src', fr.result);
-        };
-        fr.readAsDataURL(chat_file_element.files[0]);
+var event_request_func = function event_request_func(url) {
+  var xmlHttpRequest = new XMLHttpRequest(); // CSRFのトークン
 
-        new_chat_content_item_element.appendChild(new_chat_file_element);
+  var token = document.getElementsByName('csrf-token')[0].content;
+  var formData = new FormData(); // 通信後の処理
+
+  xmlHttpRequest.onreadystatechange = function () {
+    // 通信成功時
+    if (this.readyState == 4 && this.status == 200) {
+      // チャットのHTMLを追加
+      var chat_content_container_element = document.getElementById('chat_content_container');
+
+      if (chat_content_container_element) {
+        chat_content_container_element.remove();
+      }
+
+      var tmp_element = document.createElement('div');
+      tmp_element.id = 'chat_content_container';
+      var users_container_element = document.getElementById('users_container');
+      tmp_element.innerHTML = xmlHttpRequest.responseText;
+      users_container_element.appendChild(tmp_element); // チャット用のスクリプトを追加
+
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = location.origin + '/js/chatRoom.js';
+      var firstScript = document.getElementsByTagName('script')[0];
+      firstScript.parentNode.insertBefore(script, firstScript);
     }
-    
-    // チャットリストにくっつける
-    chat_content_list_element.appendChild(new_chat_content_item_element);
-    
+  }; // HTTPのPOSTメソッドとアクセスする場所を指定
+
+
+  xmlHttpRequest.open('POST', url, true); // トークンの指定
+
+  xmlHttpRequest.setRequestHeader('X-CSRF-TOKEN', token); // HTTPリクエストを送信
+
+  xmlHttpRequest.send(formData);
 };
-
-// xmlHttpRequestを用いて非同期処理
-const submit_http_request_func = (save_url) => {
-    const xmlHttpRequest = new XMLHttpRequest();
-    // CSRFのトークン
-    const token = document.getElementsByName('csrf-token')[0].content;
-    const formData = new FormData();
-
-    // 文字の場合
-    if(chat_txt_element.value) {
-        formData.append('body', chat_txt_element.value);
-    // 画像の場合
-    } else if(chat_file_element.value) {
-        const fileData = chat_file_element.files[0];
-        formData.append('post_image', fileData);
-    }
-
-    // 通信後の処理
-    xmlHttpRequest.onreadystatechange = function(){
-        // 通信成功時
-        if(this.readyState == 4 && this.status == 200){
-            // チャット追加の処理
-            add_new_chat_item();
-        }
-    }
-
-    // HTTPのPOSTメソッドとアクセスする場所を指定
-    xmlHttpRequest.open('POST',save_url,true);
-
-    // トークンの指定
-    xmlHttpRequest.setRequestHeader('X-CSRF-TOKEN', token);
-
-    // HTTPリクエストを送信
-    xmlHttpRequest.send(formData);
-};
-
-console.log('test');
-// 送信ボタン押下時
-submit_btn_element.addEventListener('click', () => {
-    if(chat_txt_element.value || chat_file_element.value) {
-        const save_url = submit_btn_element.dataset.saveurl;
-        submit_http_request_func(save_url);
-    }
-}, false);
-
-
-/*
-|--------------------------------------------------------------------------
-| ここからjQuery(Ajax)での処理
-|--------------------------------------------------------------------------
-|
-*/
-
-// // 送信ボタン押下時
-// submit_btn_element.addEventListener('click', () => {
-//     console.log(chat_file_element.files[0]);
-//     FileUpload(chat_file_element.files[0]);
-// }, false);
-
-
-// // ファイルアップロード
-// function FileUpload(f) {
-//     console.log('uuuu');
-//     var formData = new FormData();
-//     formData.append('post_image', f);
-//     console.log(formData);
-//     $.ajax({
-//         type: 'POST',
-//         dataType : "text",
-//         contentType: false,
-//         processData: false,
-//         url: location.href,//ここを変更
-//         data: formData,
-//         headers: {
-//             'X-CSRF-TOKEN': document.getElementsByName('csrf-token')[0].content
-//         }
-//     }).done(function(json) {
-//         add_new_chat_item();
-//     }).fail(function(jqXHR, textStatus, errorThrown) {
-
-//     });
-// }
-
-/**
- * Ajaxの処理ここまで
- */
+/******/ })()
+;

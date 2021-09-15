@@ -6,7 +6,19 @@ var __webpack_exports__ = {};
   \******************************/
  // チャットのリンク部分の要素たち
 
-var chat_room_link_item_elements = document.getElementsByClassName('chat_room_link_item'); // チャットリンククリック時の関数
+var chat_room_link_item_elements = document.getElementsByClassName('chat_room_link_item'); // クリックイベント（チャットの表示）の許可を割り当て
+
+var chat_room_event_allocate = function chat_room_event_allocate(target) {
+  for (var i = 0; i < chat_room_link_item_elements.length; i++) {
+    chat_room_link_item_elements[i].addEventListener('click', chat_room_link_item_func);
+  }
+
+  if (target !== null) {
+    // 現在表示させているものはクリックイベント削除
+    target.removeEventListener('click', chat_room_link_item_func);
+  }
+}; // チャットリンククリック時の関数
+
 
 var chat_room_link_item_func = function chat_room_link_item_func(e) {
   // セーブ先のURLを指定
@@ -14,14 +26,10 @@ var chat_room_link_item_func = function chat_room_link_item_func(e) {
   var event_url = target.dataset.posturl;
   submit_http_request_func(event_url); // 2回目以降はNG（仮）
 
-  target.removeEventListener('click', chat_room_link_item_func);
+  chat_room_event_allocate(target);
 };
 
-for (var i = 0; i < chat_room_link_item_elements.length; i++) {
-  // チャットのリンクをクリックすると
-  chat_room_link_item_elements[i].addEventListener('click', chat_room_link_item_func);
-} // xmlHttpRequestを用いて非同期処理
-
+chat_room_event_allocate(null); // xmlHttpRequestを用いて非同期処理
 
 var submit_http_request_func = function submit_http_request_func(url) {
   var xmlHttpRequest = new XMLHttpRequest(); // CSRFのトークン
@@ -33,14 +41,21 @@ var submit_http_request_func = function submit_http_request_func(url) {
     // 通信成功時
     if (this.readyState == 4 && this.status == 200) {
       // チャットのHTMLを追加
+      var chat_content_container_element = document.getElementById('chat_content_container');
+
+      if (chat_content_container_element) {
+        chat_content_container_element.remove();
+      }
+
       var tmp_element = document.createElement('div');
+      tmp_element.id = 'chat_content_container';
       var users_container_element = document.getElementById('users_container');
       tmp_element.innerHTML = xmlHttpRequest.responseText;
       users_container_element.appendChild(tmp_element); // チャット用のスクリプトを追加
 
       var script = document.createElement('script');
       script.type = 'text/javascript';
-      script.src = 'http://127.0.0.1:8000/js/chat.js';
+      script.src = location.origin + '/js/chat.js';
       var firstScript = document.getElementsByTagName('script')[0];
       firstScript.parentNode.insertBefore(script, firstScript);
     }

@@ -19,6 +19,7 @@ class CreateChatContentsTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->text('body')->nullable();
             $table->text('post_image')->nullable();
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }
