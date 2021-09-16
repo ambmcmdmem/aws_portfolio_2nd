@@ -47,7 +47,7 @@ class User extends Authenticatable
     ];
 
     public function chat_rooms() {
-        return $this->belongsToMany(ChatRoom::class);
+        return $this->belongsToMany(ChatRoom::class)->orderBy('updated_at', 'desc');
     }
 
     public function getAvatarAttribute($avatar) {

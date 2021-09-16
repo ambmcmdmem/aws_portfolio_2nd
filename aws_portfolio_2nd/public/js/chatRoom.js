@@ -13,15 +13,29 @@ var chat_content_list_element = document.getElementById('chat_content_list'); //
 
 var chat_txt_element = document.getElementById('new_chat_txt'); // 選択した画像の要素
 
-var chat_file_element = document.getElementById('new_chat_file'); // 新しくチャットを追加
+var chat_file_element = document.getElementById('new_chat_file'); // 日時用
+// 現在の日時を返す
+
+var returnDate = function returnDate(now) {
+  var Year = String(now.getFullYear()); // 0埋めするため
+
+  var Month = ("0" + String(now.getMonth() + 1)).slice(-2);
+  var Date = ("0" + String(now.getDate())).slice(-2);
+  var Hour = ("0" + String(now.getHours())).slice(-2);
+  var Min = ("0" + String(now.getMinutes())).slice(-2); // なぜか1秒ずれるため-1する
+
+  var Sec = ("0" + String(now.getSeconds() - 1)).slice(-2);
+  return Year + '-' + Month + '-' + Date + ' ' + Hour + ':' + Min + ':' + Sec;
+}; // 新しくチャットを追加
+
 
 var add_new_chat_item = function add_new_chat_item() {
   // 新しく追加されるチャット内容
   var new_chat_content_item_element = document.createElement('li');
-  new_chat_content_item_element.classList.add('my_chat_content'); // 投稿時間（1秒前とする）
+  new_chat_content_item_element.classList.add('my_chat_content'); // 投稿時間
 
   var new_chat_time_element = document.createElement('time');
-  new_chat_time_element.textContent = '1 seconds ago';
+  new_chat_time_element.textContent = returnDate(new Date());
   new_chat_time_element.classList.add('d-block');
   new_chat_content_item_element.appendChild(new_chat_time_element);
   var chat_file_list = chat_file_element.files; // 文字の場合

@@ -15,7 +15,7 @@ class UserController extends Controller
     public function index()
     {
         //
-        return view('users.index');
+        // return view('users.index');
     }
 
     /**
@@ -86,15 +86,17 @@ class UserController extends Controller
 
     // 検索
     public function search() {
-        
         $my_id = auth()->user()->id;
         // 該当するユーザー（自分除く）を取得
-        $users = User::whereUsername(request('username'))
+        $user = User::whereUsername(request('username'))
             ->where('id', '!=', $my_id)
-            ->get();
+            ->first();
 
         // dd($users);
-
-        return view('users.search', compact('users'));
+        // return view('users.search', compact('users'));
+        if($user)
+            return view('components.users.search', compact('user'));
+        else
+            return null;
     }
 }

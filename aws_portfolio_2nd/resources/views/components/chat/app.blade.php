@@ -1,7 +1,8 @@
+{{-- チャットルーム部分 --}}
 <ul id="chat_content_list" class="list" data-roomid="{{ $chatRoom->id }}">
 @foreach ($chatRoom->chat_contents as $chat_content)
     <li class="{{ $chat_content->return_chat_content_class() }}">
-        <time class="d-block">{{ $chat_content->updated_at->diffForHumans() }}</time>
+        <time class="d-block">{{ $chat_content->created_at }}</time>
 
         @if ($chat_content->body)
             {{ $chat_content->body }}                
@@ -13,6 +14,8 @@
 @endforeach
 </ul>
 
+
+{{-- チャット送信部分 --}}
 @csrf
 <input id="new_chat_file" type="file" name="post_image" ondragover="onDragOver(event)" ondrop="onDrop(event)">
 <input id="new_chat_txt" type="text" name="body">

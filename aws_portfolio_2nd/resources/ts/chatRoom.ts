@@ -9,15 +9,33 @@ const chat_txt_element:HTMLInputElement = (<HTMLInputElement>document.getElement
 // 選択した画像の要素
 const chat_file_element:HTMLInputElement = (<HTMLInputElement>document.getElementById('new_chat_file'));
 
+// 日時用
+// 現在の日時を返す
+const returnDate = (now:Date):string => {
+    const Year:string = String(now.getFullYear());
+    // 0埋めするため
+    const Month:string = ("0" + String(now.getMonth()+1)).slice(-2);
+    const Date:string =  ("0" + String(now.getDate())).slice(-2);
+    const Hour:string =  ("0" + String(now.getHours())).slice(-2);
+    const Min:string =  ("0" + String(now.getMinutes())).slice(-2);
+    // なぜか1秒ずれるため-1する
+    const Sec:string =  ("0" + String(now.getSeconds() - 1)).slice(-2);
+
+    return Year + '-' + Month + '-' + Date + ' ' + Hour + ':' + Min + ':' + Sec;
+}
+
+
 // 新しくチャットを追加
 const add_new_chat_item = () => {
     // 新しく追加されるチャット内容
     const new_chat_content_item_element:HTMLElement = (<HTMLElement>document.createElement('li'));
     new_chat_content_item_element.classList.add('my_chat_content');
 
-    // 投稿時間（1秒前とする）
+    // 投稿時間
     const new_chat_time_element:HTMLElement = (<HTMLElement>document.createElement('time'));
-    new_chat_time_element.textContent = '1 seconds ago';
+
+
+    new_chat_time_element.textContent = returnDate(new Date());
     new_chat_time_element.classList.add('d-block');
     new_chat_content_item_element.appendChild(new_chat_time_element);
 

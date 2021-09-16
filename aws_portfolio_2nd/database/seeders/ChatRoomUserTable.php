@@ -23,20 +23,21 @@ class ChatRoomUserTable extends Seeder
         ChatRoom::factory(2)->create();
         $myId = -1;
 
-        $myName = 'Daiki';
+        $myName = 'TestDaiki';
 
         // Daiki(テストの自分のユーザ)がいれば
-        if(!User::whereName($myName)->exists()) {
-            $myId = User::insertGetId([
-                'name' => $myName,
-                'email' => 'ambmcmdmem@au.com',
-                'email_verified_at' => now(),
-                'password' => Hash::make('Daiki12345'), // password
-                'remember_token' => Str::random(10),
-            ]);
-        } else {
-            $myId = User::whereName('Daiki')->first()->id;
-        }
+        // if(!User::whereName($myName)->exists()) {
+        //     $myId = User::insertGetId([
+        //         'username' => $myName,
+        //         'name' => $myName,
+        //         'email' => 'ambmcmdmem@au.com',
+        //         'email_verified_at' => now(),
+        //         'password' => Hash::make('Daiki12345'), // password
+        //         'remember_token' => Str::random(10),
+        //     ]);
+        // } else {
+        //     $myId = User::whereName('Daiki')->first()->id;
+        // }
 
         // UserId1のゆーざと自分をくっつける
         if(!DB::table('chat_room_user')->whereUserId(1)->exists()) {

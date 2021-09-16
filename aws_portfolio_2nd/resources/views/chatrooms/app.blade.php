@@ -4,7 +4,7 @@
 @section('content')
 
 <div id="chat_app_container" class="container">
-    <a href="{{ route('users.index') }}">戻る</a>
+    <a href="{{ route('index') }}">戻る</a>
 
     @include('components.chat.app', compact('chatRoom'))
 

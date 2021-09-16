@@ -45,7 +45,7 @@ class ChatRoomController extends Controller
         }
 
         // return back();
-        return redirect()->route('users.index');
+        return redirect()->route('index');
     }
 
     public function getApp(ChatRoom $chatRoom) {

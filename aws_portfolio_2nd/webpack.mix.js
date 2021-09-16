@@ -12,6 +12,7 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
+    .ts('resources/ts/users/search.ts', 'public/js/users')
     .ts('resources/ts/chat.ts', 'public/js')
     .ts('resources/ts/chatRoom.ts', 'public/js')
     .react()

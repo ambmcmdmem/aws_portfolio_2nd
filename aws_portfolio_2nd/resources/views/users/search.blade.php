@@ -2,7 +2,7 @@
 
 @section('content')
 {{-- ユーザー検索ページ（同期処理） --}}
-<a href="{{ route('users.index') }}">もどる</a>
+<a href="{{ route('index') }}">もどる</a>
 {{-- 見つかった場合 --}}
 @if (count($users))
 以下のユーザーが見つかりました。

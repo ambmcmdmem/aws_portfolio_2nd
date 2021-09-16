@@ -3,5 +3,5 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
-Route::get('/', [UserController::class, 'index'])->name('users.index');
-Route::get('/search/', [UserController::class, 'search'])->name('users.search');
+// Route::get('/search/', [UserController::class, 'search'])->name('users.search');
+Route::post('/search/', [UserController::class, 'search'])->name('users.search');
