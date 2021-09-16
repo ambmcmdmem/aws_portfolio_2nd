@@ -57,6 +57,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->middleware(['web', 'auth'])
                 ->namespace($this->namespace)
                 ->group(base_path('routes/chatrooms/chatrooms.php'));
+
+            Route::prefix('chatcontents')
+                ->middleware(['web', 'auth'])
+                ->namespace($this->namespace)
+                ->group(base_path('routes/chatcontents/chatcontents.php'));
         });
     }
 

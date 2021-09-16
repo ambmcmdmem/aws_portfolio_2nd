@@ -21,16 +21,31 @@ class ChatRoomController extends Controller
         return view('chatrooms.app', compact('chatRoom'));
     }
 
-    public function create(ChatRoom $chatRoom) {
-        $input = request()->all();
-        $input['user_id'] = auth()->user()->id;
-        if(request('post_image')) {
-            $input['post_image'] = request('post_image')->store('images');
+    // public function create(ChatRoom $chatRoom) {
+    //     $input = request()->all();
+    //     $input['user_id'] = auth()->user()->id;
+    //     if(request('post_image')) {
+    //         $input['post_image'] = request('post_image')->store('images');
+    //     }
+
+    //     $chatRoom->chat_contents()->create($input);
+
+    //     // return back();
+    // }
+
+    public function create() {
+
+        if(request('user_id')) {
+            $new_chat_room = ChatRoom::create();
+
+            // 自分を割り当て
+            $new_chat_room->users()->attach(auth()->user()->id);
+            // パートナーを割り当て
+            $new_chat_room->users()->attach(request('user_id'));
         }
 
-        $chatRoom->chat_contents()->create($input);
-
         // return back();
+        return redirect()->route('users.index');
     }
 
     public function getApp(ChatRoom $chatRoom) {

@@ -4,7 +4,8 @@ var __webpack_exports__ = {};
 /*!**********************************!*\
   !*** ./resources/ts/chatRoom.ts ***!
   \**********************************/
- // 送信ボタン
+ // チャット開いた後の処理を主に記載
+// 送信ボタン
 
 var submit_btn_element = document.getElementById('new_chat_submit_btn'); // チャットリスト
 
@@ -17,10 +18,18 @@ var chat_file_element = document.getElementById('new_chat_file'); // 新しく�
 var add_new_chat_item = function add_new_chat_item() {
   // 新しく追加されるチャット内容
   var new_chat_content_item_element = document.createElement('li');
+  new_chat_content_item_element.classList.add('my_chat_content'); // 投稿時間（1秒前とする）
+
+  var new_chat_time_element = document.createElement('time');
+  new_chat_time_element.textContent = '1 seconds ago';
+  new_chat_time_element.classList.add('d-block');
+  new_chat_content_item_element.appendChild(new_chat_time_element);
   var chat_file_list = chat_file_element.files; // 文字の場合
 
   if (chat_txt_element.value) {
-    new_chat_content_item_element.textContent = chat_txt_element.value; // 画像の場合
+    var new_chat_txt_element = document.createElement('p');
+    new_chat_txt_element.textContent = chat_txt_element.value;
+    new_chat_content_item_element.appendChild(new_chat_txt_element); // 画像の場合
   } else if (chat_file_list) {
     var fr = new FileReader();
     var new_chat_file_element = document.createElement('img');
@@ -37,14 +46,18 @@ var add_new_chat_item = function add_new_chat_item() {
 
   chat_content_list_element.appendChild(new_chat_content_item_element);
 }; // xmlHttpRequestを用いて非同期処理
+// const submit_http_request_func = (save_url:string) => {
 
 
-var submit_http_request_func = function submit_http_request_func(save_url) {
+var submit_http_request_func = function submit_http_request_func() {
   var xmlHttpRequest = new XMLHttpRequest(); // CSRFのトークン
 
   var token = document.getElementsByName('csrf-token')[0].content;
   var formData = new FormData();
-  var chat_file_list = chat_file_element.files; // 文字の場合
+  var chat_file_list = chat_file_element.files; // チャットルームのIDを付加
+
+  if (typeof chat_content_list_element.dataset.roomid === 'string') formData.append('chat_room_id', chat_content_list_element.dataset.roomid);
+  console.log(String(chat_content_list_element.dataset.roomid)); // 文字の場合
 
   if (chat_txt_element.value) {
     formData.append('body', chat_txt_element.value); // 画像の場合
@@ -63,19 +76,17 @@ var submit_http_request_func = function submit_http_request_func(save_url) {
   }; // HTTPのPOSTメソッドとアクセスする場所を指定
 
 
-  xmlHttpRequest.open('POST', save_url, true); // トークンの指定
+  xmlHttpRequest.open('POST', location.origin + '/chatcontents/create/', true); // トークンの指定
 
   xmlHttpRequest.setRequestHeader('X-CSRF-TOKEN', token); // HTTPリクエストを送信
 
   xmlHttpRequest.send(formData);
-};
+}; // 送信ボタン押下時
 
-console.log('test'); // 送信ボタン押下時
 
 submit_btn_element.addEventListener('click', function () {
   if (chat_txt_element.value || chat_file_element.value) {
-    var save_url = submit_btn_element.dataset.saveurl;
-    submit_http_request_func(save_url);
+    submit_http_request_func();
   }
 }, false);
 /*

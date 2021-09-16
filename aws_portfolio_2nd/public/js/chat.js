@@ -23,11 +23,17 @@ var chat_room_event_allocate = function chat_room_event_allocate(target) {
 var chat_room_link_item_func = function chat_room_link_item_func(e) {
   // セーブ先のURLを指定
   var target = e.currentTarget;
-  var event_url = target.dataset.posturl;
-  event_request_func(event_url); // 2回目以降はNG（仮）
 
-  chat_room_event_allocate(target);
-};
+  if (target.dataset.posturl !== undefined) {
+    var event_url = target.dataset.posturl;
+    event_request_func(event_url); // 現在表示させているルームのリンクのクリックイベントをremove
+
+    chat_room_event_allocate(target);
+  } else {
+    alert('event_url is undefined!');
+  }
+}; // クリックイベント付加
+
 
 chat_room_event_allocate(null); // xmlHttpRequestを用いて非同期処理
 
@@ -56,7 +62,7 @@ var event_request_func = function event_request_func(url) {
       var chat_content_list_element = document.getElementById('chat_content_list');
       var partner_user_id = Number(chat_content_list_element.dataset.partnerid);
       var chat_notification_element = document.getElementById('chat_notification_' + partner_user_id);
-      chat_notification_element.remove(); // チャット用のスクリプトを追加
+      if (chat_notification_element !== null) chat_notification_element.remove(); // チャット用のスクリプトを追加
 
       var script = document.createElement('script');
       script.type = 'text/javascript';

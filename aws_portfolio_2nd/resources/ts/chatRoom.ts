@@ -1,3 +1,5 @@
+// チャット開いた後の処理を主に記載
+
 // 送信ボタン
 const submit_btn_element:HTMLInputElement = (<HTMLInputElement>document.getElementById('new_chat_submit_btn')); 
 // チャットリスト
@@ -11,11 +13,22 @@ const chat_file_element:HTMLInputElement = (<HTMLInputElement>document.getElemen
 const add_new_chat_item = () => {
     // 新しく追加されるチャット内容
     const new_chat_content_item_element:HTMLElement = (<HTMLElement>document.createElement('li'));
+    new_chat_content_item_element.classList.add('my_chat_content');
+
+    // 投稿時間（1秒前とする）
+    const new_chat_time_element:HTMLElement = (<HTMLElement>document.createElement('time'));
+    new_chat_time_element.textContent = '1 seconds ago';
+    new_chat_time_element.classList.add('d-block');
+    new_chat_content_item_element.appendChild(new_chat_time_element);
+
+
     const chat_file_list:FileList = <FileList>chat_file_element.files;
 
     // 文字の場合
     if(chat_txt_element.value) {
-        new_chat_content_item_element.textContent = chat_txt_element.value;
+        const new_chat_txt_element:HTMLElement = (<HTMLElement>document.createElement('p'));
+        new_chat_txt_element.textContent = chat_txt_element.value;
+        new_chat_content_item_element.appendChild(new_chat_txt_element);
     // 画像の場合
     } else if(chat_file_list) {
         const fr:FileReader = new FileReader();
@@ -37,13 +50,20 @@ const add_new_chat_item = () => {
 };
 
 // xmlHttpRequestを用いて非同期処理
-const submit_http_request_func = (save_url:string) => {
+// const submit_http_request_func = (save_url:string) => {
+const submit_http_request_func = () => {
     const xmlHttpRequest = new XMLHttpRequest();
     // CSRFのトークン
     const token:string = (<HTMLMetaElement>document.getElementsByName('csrf-token')[0]).content;
     const formData = new FormData();
     const chat_file_list:FileList = <FileList>chat_file_element.files;
 
+    // チャットルームのIDを付加
+    if(typeof chat_content_list_element.dataset.roomid === 'string')
+        formData.append('chat_room_id', chat_content_list_element.dataset.roomid);
+
+    console.log(String(chat_content_list_element.dataset.roomid));
+    
     // 文字の場合
     if(chat_txt_element.value) {
         formData.append('body', chat_txt_element.value);
@@ -63,7 +83,7 @@ const submit_http_request_func = (save_url:string) => {
     }
 
     // HTTPのPOSTメソッドとアクセスする場所を指定
-    xmlHttpRequest.open('POST',save_url,true);
+    xmlHttpRequest.open('POST', location.origin + '/chatcontents/create/', true);
 
     // トークンの指定
     xmlHttpRequest.setRequestHeader('X-CSRF-TOKEN', token);
@@ -72,12 +92,10 @@ const submit_http_request_func = (save_url:string) => {
     xmlHttpRequest.send(formData);
 };
 
-console.log('test');
 // 送信ボタン押下時
 submit_btn_element.addEventListener('click', () => {
     if(chat_txt_element.value || chat_file_element.value) {
-        const save_url:string = submit_btn_element.dataset.saveurl!;
-        submit_http_request_func(save_url);
+        submit_http_request_func();
     }
 }, false);
 

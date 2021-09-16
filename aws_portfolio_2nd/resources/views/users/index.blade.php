@@ -2,8 +2,16 @@
 
 @section('content')
 
-<div id="users_container" class="container d-flex justify-content-between">
+{{-- ユーザー（友達）検索の窓 --}}
+<div id="search_container" class="container">
+    <form method="GET" action="{{ route('users.search') }}">
+        <input type="text" name="username" placeholder="ユーザーIDを入力してください">
+        <button type="submit">検索</button>
+    </form>
+</div>
 
+{{-- チャット部分の窓 --}}
+<div id="users_container" class="container d-flex justify-content-between">
     <ul>
     @foreach(auth()->user()->chat_rooms as $chat_room)
         <li id="chat_room_{{ $chat_room->id }}" class="d-flex align-items-center chat_room_link_item" data-posturl="{{ route('chatrooms.getApp', $chat_room) }}">

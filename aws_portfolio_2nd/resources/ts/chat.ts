@@ -17,13 +17,18 @@ const chat_room_event_allocate = (target:HTMLInputElement|null) => {
 const chat_room_link_item_func = (e:Event) => {
     // セーブ先のURLを指定
     const target:HTMLInputElement = (<HTMLInputElement>e.currentTarget);
-    const event_url:string = target.dataset.posturl!;
-    event_request_func(event_url);
+    if(target.dataset.posturl !== undefined) {
+        const event_url:string = target.dataset.posturl;
+        event_request_func(event_url);
 
-    // 2回目以降はNG（仮）
-    chat_room_event_allocate(target);
+        // 現在表示させているルームのリンクのクリックイベントをremove
+        chat_room_event_allocate(target);
+    } else {
+        alert('event_url is undefined!');
+    }
 }
 
+// クリックイベント付加
 chat_room_event_allocate(null);
 
 // xmlHttpRequestを用いて非同期処理
@@ -51,8 +56,9 @@ const event_request_func = (url:string) => {
             // 通知の削除
             const chat_content_list_element = (<HTMLElement>document.getElementById('chat_content_list'));
             const partner_user_id:number = Number(chat_content_list_element.dataset.partnerid);
-            const chat_notification_element:Element = (<Element>document.getElementById('chat_notification_' + partner_user_id));
-            chat_notification_element.remove();
+            const chat_notification_element = document.getElementById('chat_notification_' + partner_user_id);
+            if(chat_notification_element !== null)
+                chat_notification_element.remove();
 
             // チャット用のスクリプトを追加
             const script = document.createElement( 'script' );

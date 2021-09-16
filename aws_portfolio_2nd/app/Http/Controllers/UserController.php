@@ -83,4 +83,18 @@ class UserController extends Controller
     {
         //
     }
+
+    // 検索
+    public function search() {
+        
+        $my_id = auth()->user()->id;
+        // 該当するユーザー（自分除く）を取得
+        $users = User::whereUsername(request('username'))
+            ->where('id', '!=', $my_id)
+            ->get();
+
+        // dd($users);
+
+        return view('users.search', compact('users'));
+    }
 }

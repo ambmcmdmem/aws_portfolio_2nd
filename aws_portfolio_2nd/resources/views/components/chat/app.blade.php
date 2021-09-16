@@ -1,4 +1,4 @@
-<ul id="chat_content_list" class="list" data-partnerid="{{ $chatRoom->getPartner()->id }}">
+<ul id="chat_content_list" class="list" data-roomid="{{ $chatRoom->id }}">
 @foreach ($chatRoom->chat_contents as $chat_content)
     <li class="{{ $chat_content->return_chat_content_class() }}">
         <time class="d-block">{{ $chat_content->updated_at->diffForHumans() }}</time>
@@ -16,6 +16,6 @@
 @csrf
 <input id="new_chat_file" type="file" name="post_image" ondragover="onDragOver(event)" ondrop="onDrop(event)">
 <input id="new_chat_txt" type="text" name="body">
-<button id="new_chat_submit_btn" type="submit" data-saveurl="{{ route('chatrooms.create', $chatRoom) }}">
+<button id="new_chat_submit_btn" type="submit">
     送信
 </button>
