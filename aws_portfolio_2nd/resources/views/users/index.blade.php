@@ -11,7 +11,7 @@
             <div class="">{{ $chat_room->getPartner()->name }}</div>
             <time>{{ $chat_room->updated_at }}</time>
             @if($chat_room->getUnreadCnt())
-                <span class="badge badge-pill badge-dark">{{ $chat_room->getUnreadCnt() }}</span>
+                <span id="chat_notification_{{ $chat_room->id }}" class="badge badge-pill badge-dark">{{ $chat_room->getUnreadCnt() }}</span>
             @endif
         </li>
     @endforeach

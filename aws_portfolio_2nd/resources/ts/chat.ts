@@ -34,7 +34,7 @@ const event_request_func = (url:string) => {
     const formData:FormData = new FormData();
 
     // 通信後の処理
-    xmlHttpRequest.onreadystatechange = function(){
+    xmlHttpRequest.onreadystatechange = function(e:Event){
         // 通信成功時
         if(this.readyState == 4 && this.status == 200){
             // チャットのHTMLを追加
@@ -45,8 +45,14 @@ const event_request_func = (url:string) => {
             const tmp_element:Element = document.createElement('div');
             tmp_element.id = 'chat_content_container';
             const users_container_element:HTMLElement = (<HTMLMetaElement>document.getElementById('users_container'));
-            tmp_element.innerHTML = xmlHttpRequest.responseText;
+            tmp_element.innerHTML = xmlHttpRequest.responseText;            
             users_container_element.appendChild(tmp_element);
+
+            // 通知の削除
+            const chat_content_list_element = (<HTMLElement>document.getElementById('chat_content_list'));
+            const partner_user_id:number = Number(chat_content_list_element.dataset.partnerid);
+            const chat_notification_element:Element = (<Element>document.getElementById('chat_notification_' + partner_user_id));
+            chat_notification_element.remove();
 
             // チャット用のスクリプトを追加
             const script = document.createElement( 'script' );

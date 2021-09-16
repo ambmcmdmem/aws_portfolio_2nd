@@ -1,4 +1,4 @@
-<ul id="chat_content_list" class="list">
+<ul id="chat_content_list" class="list" data-partnerid="{{ $chatRoom->getPartner()->id }}">
 @foreach ($chatRoom->chat_contents as $chat_content)
     <li class="{{ $chat_content->return_chat_content_class() }}">
         <time class="d-block">{{ $chat_content->updated_at->diffForHumans() }}</time>

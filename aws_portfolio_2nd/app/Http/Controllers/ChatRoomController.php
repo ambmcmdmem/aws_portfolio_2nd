@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ChatRoom;
+use App\Models\ChatContent;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 // use App\Models\ChatContent;
@@ -33,6 +34,12 @@ class ChatRoomController extends Controller
     }
 
     public function getApp(ChatRoom $chatRoom) {
+        // 既読の処理
+        ChatContent::whereUserId($chatRoom->getPartner()->id)
+            ->whereChatRoomId($chatRoom->id)
+            ->update(['is_read' => true]);
+        
+        // HTMLを返す
         return view('components.chat.app', compact('chatRoom'));
     }
 }

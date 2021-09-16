@@ -37,7 +37,7 @@ var event_request_func = function event_request_func(url) {
   var token = document.getElementsByName('csrf-token')[0].content;
   var formData = new FormData(); // 通信後の処理
 
-  xmlHttpRequest.onreadystatechange = function () {
+  xmlHttpRequest.onreadystatechange = function (e) {
     // 通信成功時
     if (this.readyState == 4 && this.status == 200) {
       // チャットのHTMLを追加
@@ -51,7 +51,12 @@ var event_request_func = function event_request_func(url) {
       tmp_element.id = 'chat_content_container';
       var users_container_element = document.getElementById('users_container');
       tmp_element.innerHTML = xmlHttpRequest.responseText;
-      users_container_element.appendChild(tmp_element); // チャット用のスクリプトを追加
+      users_container_element.appendChild(tmp_element); // 通知の削除
+
+      var chat_content_list_element = document.getElementById('chat_content_list');
+      var partner_user_id = Number(chat_content_list_element.dataset.partnerid);
+      var chat_notification_element = document.getElementById('chat_notification_' + partner_user_id);
+      chat_notification_element.remove(); // チャット用のスクリプトを追加
 
       var script = document.createElement('script');
       script.type = 'text/javascript';
