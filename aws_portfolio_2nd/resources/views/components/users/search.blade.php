@@ -15,7 +15,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 {{-- このユーザーがパートナーであれば --}}
-                @if(auth()->user()->is_partner($user))
+                @if(auth()->user()->is_partner($user->id))
                     <div class="btn btn-secondary">追加済み</div>
                 @else
                     <form action="{{ route('chatrooms.create') }}" method="POST">

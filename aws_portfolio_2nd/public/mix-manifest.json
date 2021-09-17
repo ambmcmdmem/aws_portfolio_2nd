@@ -3,5 +3,6 @@
     "/js/users/search.js": "/js/users/search.js",
     "/js/chat.js": "/js/chat.js",
     "/js/chatRoom.js": "/js/chatRoom.js",
+    "/js/common.js": "/js/common.js",
     "/css/app.css": "/css/app.css"
 }

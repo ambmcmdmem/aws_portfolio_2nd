@@ -27,8 +27,13 @@ var return_search_user = function return_search_user() {
         username_input_element.classList.add('is-invalid', 'alert-danger');
         username_input_element.setAttribute('role', 'alert'); // ユーザーが見つかった場合
       } else {
+        var tmp_element_id = 'user_search_modal_wrap';
+        var already_tmp_element = document.getElementById(tmp_element_id); // 既存のモーダルは削除する
+
+        if (already_tmp_element !== null) already_tmp_element.remove();
         var tmp_element = document.createElement('div');
         tmp_element.innerHTML = xmlHttpRequest.responseText;
+        tmp_element.id = tmp_element_id;
 
         if (search_container_element !== null) {
           search_container_element.appendChild(tmp_element);

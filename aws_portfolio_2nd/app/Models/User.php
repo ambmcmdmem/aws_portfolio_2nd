@@ -59,15 +59,15 @@ class User extends Authenticatable
     }
 
     /**
-     * $opponent_userがパートナー（チャットできるか）を返す
+     * $user_idのユーザーがパートナー（チャットできるか）を返す
      *
-     * @param User $opponent_user
+     * @param integer $user_id
      * @return boolean
      */
-    public function is_partner(User $opponent_user) {
+    public function is_partner(int $user_id) {
         foreach($this->chat_rooms as $chat_room) {
             foreach($chat_room->users as $user) {
-                if($user == $opponent_user) {
+                if($user->id == $user_id) {
                     return true;
                 }
             }

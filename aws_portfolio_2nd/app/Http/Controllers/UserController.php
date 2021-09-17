@@ -83,8 +83,11 @@ class UserController extends Controller
     {
         //
     }
-
-    // 検索
+    /**
+     * ユーザーの検索を行う
+     *
+     * @return void
+     */
     public function search() {
         $my_id = auth()->user()->id;
         // 該当するユーザー（自分除く）を取得
@@ -98,5 +101,9 @@ class UserController extends Controller
         // 見つからなければ
         else
             return '';
+    }
+
+    public function profile() {
+        return view('users.profile');
     }
 }

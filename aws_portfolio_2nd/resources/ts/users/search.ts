@@ -24,8 +24,16 @@ const return_search_user = () => {
                 username_input_element.setAttribute('role', 'alert');
             // ユーザーが見つかった場合
             } else {
+                const tmp_element_id:string = 'user_search_modal_wrap';
+                const already_tmp_element:HTMLElement|null = document.getElementById(tmp_element_id);
+
+                // 既存のモーダルは削除する
+                if(already_tmp_element !== null)
+                    already_tmp_element.remove();
+
                 const tmp_element:Element = document.createElement('div');
                 tmp_element.innerHTML = xmlHttpRequest.responseText;
+                tmp_element.id = tmp_element_id;
                 if(search_container_element !== null) {
                     search_container_element.appendChild(tmp_element);
                     const user_search_modal_element = document.getElementById('user_search_modal');
