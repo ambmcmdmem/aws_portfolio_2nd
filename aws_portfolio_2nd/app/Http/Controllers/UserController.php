@@ -92,11 +92,11 @@ class UserController extends Controller
             ->where('id', '!=', $my_id)
             ->first();
 
-        // dd($users);
-        // return view('users.search', compact('users'));
+        // ユーザーが見つかれば
         if($user)
             return view('components.users.search', compact('user'));
+        // 見つからなければ
         else
-            return null;
+            return '';
     }
 }

@@ -18,8 +18,8 @@ const returnDate = (now:Date):string => {
     const Date:string =  ("0" + String(now.getDate())).slice(-2);
     const Hour:string =  ("0" + String(now.getHours())).slice(-2);
     const Min:string =  ("0" + String(now.getMinutes())).slice(-2);
-    // なぜか1秒ずれるため-1する
-    const Sec:string =  ("0" + String(now.getSeconds() - 1)).slice(-2);
+    // なぜか1秒ずれるため-1する <- なし
+    const Sec:string =  ("0" + String(now.getSeconds())).slice(-2);
 
     return Year + '-' + Month + '-' + Date + ' ' + Hour + ':' + Min + ':' + Sec;
 }
@@ -97,6 +97,7 @@ const submit_http_request_func = () => {
         if(this.readyState == 4 && this.status == 200){
             // チャット追加の処理
             add_new_chat_item();
+            console.log(xmlHttpRequest.responseText);
         }
     }
 

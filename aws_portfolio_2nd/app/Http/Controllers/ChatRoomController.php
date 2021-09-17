@@ -47,6 +47,7 @@ class ChatRoomController extends Controller
         // return back();
         return redirect()->route('index');
     }
+    
 
     public function getApp(ChatRoom $chatRoom) {
         // 既読の処理

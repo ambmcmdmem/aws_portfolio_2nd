@@ -22,10 +22,9 @@ var return_search_user = function return_search_user() {
   xmlHttpRequest.onreadystatechange = function () {
     // 通信成功時
     if (this.readyState == 4 && this.status == 200) {
-      console.log(xmlHttpRequest.responseText); // ユーザーが見つからなかった場合
-
+      // ユーザーが見つからなかった場合
       if (xmlHttpRequest.responseText === '') {
-        username_input_element.classList.add('alert', 'alert-danger');
+        username_input_element.classList.add('is-invalid', 'alert-danger');
         username_input_element.setAttribute('role', 'alert'); // ユーザーが見つかった場合
       } else {
         var tmp_element = document.createElement('div');
@@ -34,8 +33,8 @@ var return_search_user = function return_search_user() {
         if (search_container_element !== null) {
           search_container_element.appendChild(tmp_element);
           var user_search_modal_element = document.getElementById('user_search_modal');
-          if (user_search_modal_element !== null) $('#user_search_modal').modal();
-        }
+          if (user_search_modal_element !== null) $('#user_search_modal').modal();else alert('search_modal is none!');
+        } else alert('search_container is none!');
       }
     }
   }; // HTTPのPOSTメソッドとアクセスする場所を指定

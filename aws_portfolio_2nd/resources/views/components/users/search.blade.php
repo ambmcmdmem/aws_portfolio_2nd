@@ -14,11 +14,16 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <form action="{{ route('chatrooms.create') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="user_id" value="{{ $user->id }}">
-                    <button type="submit" class="btn btn-primary">追加する</button>                            
-                </form>
+                {{-- このユーザーがパートナーであれば --}}
+                @if(auth()->user()->is_partner($user))
+                    <div class="btn btn-secondary">追加済み</div>
+                @else
+                    <form action="{{ route('chatrooms.create') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{ $user->id }}">
+                        <button type="submit" class="btn btn-primary">追加する</button>                            
+                    </form>
+                @endif
             </div>
         </div>
     </div>

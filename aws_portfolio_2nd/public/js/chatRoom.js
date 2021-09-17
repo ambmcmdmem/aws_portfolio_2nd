@@ -22,9 +22,9 @@ var returnDate = function returnDate(now) {
   var Month = ("0" + String(now.getMonth() + 1)).slice(-2);
   var Date = ("0" + String(now.getDate())).slice(-2);
   var Hour = ("0" + String(now.getHours())).slice(-2);
-  var Min = ("0" + String(now.getMinutes())).slice(-2); // なぜか1秒ずれるため-1する
+  var Min = ("0" + String(now.getMinutes())).slice(-2); // なぜか1秒ずれるため-1する <- なし
 
-  var Sec = ("0" + String(now.getSeconds() - 1)).slice(-2);
+  var Sec = ("0" + String(now.getSeconds())).slice(-2);
   return Year + '-' + Month + '-' + Date + ' ' + Hour + ':' + Min + ':' + Sec;
 }; // 新しくチャットを追加
 
@@ -86,6 +86,7 @@ var submit_http_request_func = function submit_http_request_func() {
     if (this.readyState == 4 && this.status == 200) {
       // チャット追加の処理
       add_new_chat_item();
+      console.log(xmlHttpRequest.responseText);
     }
   }; // HTTPのPOSTメソッドとアクセスする場所を指定
 
